@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="zh-cn">
+<head>
+<meta charset="UTF-8">
+<title>信息无缝滚动效果</title>
+<style>
+*{
+	margin:0; padding:0;
+}
+
+.textSlider{
+	width:800px; height:32px; background:#eee; margin:20px; overflow:hidden; position:relative;
+}
+.textSlider ul{
+	width:800px; height:32px; list-style:none; white-space:nowrap; position:relative;
+}
+.textSlider li{
+	width:auto; line-height:32px; padding-right:20px; float:left; list-style:none; background:#f1f1f1;
+}
+
+</style>
+</head>
+
+<body>
+
+<div class="textSlider">
+	<div class="wrapper">
+        <ul>
+            <li>1、阿里云服务器Centos 7安装PHP</li>
+            <li>2、Spring消息之JMS.</li>
+            <li>3、手把手教你写网络爬虫（6）：分布式爬虫</li>
+            <li>4、用 ConfigMap 管理配置 - 每天5分钟玩转 Docker 容器技术</li>
+        </ul>
+    </div>
+</div>
+
+<script type="text/javascript" src="https://cdn.bootcss.com/jquery/3.2.1/jquery.min.js"></script>
+<script type="text/javascript">
+/*
+ * 文字向左滚动, 每项宽度自动
+ */
+$.fn.textSlider = function(){
+	var container = this,					// textSlider
+		wrapper	  = container.children(),	// wrapper
+		slider	  = wrapper.children(),		// ul
+		items	  = slider.children();		// li
+	
+	var sliderWidth		= getSliderWidth(),	// 在没有复制元素时，所有项目的总宽度
+		newSliderWidth  = 0;
+	
+	// 复制元素
+	items.filter(':last').after(items.slice(0,items.length).clone().addClass('cloned'));
+	items = slider.children();
+	
+	// 计算新的宽度，给ul
+	newSliderWidth = getSliderWidth();
+	slider.width( newSliderWidth );
+	
+	// 
+	var timer1 = setInterval(leftMarquee, 30);
+	
+	
+	// 向左滚动
+	function leftMarquee(){
+		var left = Math.abs( parseInt( slider.css('left') ) );
+		if( left >= sliderWidth ){
+			left = 0;
+		}
+		slider.css('left', -(left+1)+'px');
+	}
+	
+	// 计算所有项目宽度和
+	function getSliderWidth(){
+		var width = 0;
+		for(var i=0; i<items.length; i++){
+			width += Math.ceil( items.eq(i).outerWidth() );
+			//console.log(width);
+		}
+		return width;
+	}
+	
+};
+
+$('.textSlider').textSlider();
+</script>
+
+</body>
+</html>
